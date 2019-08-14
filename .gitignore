@@ -1,0 +1,12 @@
+#ignore PyCharm files
+.idea
+
+#ignore cache files
+__pycache__
+
+#ignore python env
+venv
+
+#ignore test files
+*.h
+*.md
