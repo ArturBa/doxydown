@@ -26,12 +26,12 @@ def handle_comment(file_lines, comment_range):
 
 def function_comment(file_lines, comment_range):
     function = Function()
-    function.name = file_lines[comment_range+1][:-2].strip()
+    function.name = file_lines[comment_range+1][:file_lines[comment_range+1].find(')')+1].strip()
     function.brief = handle_key_word(file_lines, comment_range, 'brief')
     function.attentions = handle_attentions(file_lines, comment_range)
     function.params = handle_multiple_key_word(file_lines, comment_range, 'param')
     function.returns, returns_line = handle_returns(file_lines, comment_range)
-    function.description = handle_description(file_lines, comment_range-returns_line)
+    function.description = handle_description(file_lines, returns_line)
 
     return function
 
@@ -62,7 +62,7 @@ def module_comment(file_lines, comment_range):
             break
 
     module.description = handle_description(file_lines, example_line)
-    module.example = handle_description(file_lines[example_line+1:], comment_range-example_line-1, '\n')
+    module.example = handle_description(file_lines[example_line+1:], comment_range-example_line-1)
     return module
 
 
@@ -81,13 +81,13 @@ def define_comment(file_lines, comment_range):
     define.brief = handle_key_word(file_lines, comment_range, 'brief')
     define.name = handle_key_word(file_lines, comment_range, 'def')
     define.description = handle_description(file_lines, comment_range)
-    while True:
+    while comment_range+i < len(file_lines):
         if '#define' in file_lines[comment_range+i]:
             if '{' in file_lines[comment_range+1]:
                 define.code = handle_code(file_lines, comment_range)
                 break
             else:
-                define.code.append(file_lines[comment_range+i][:-1])
+                define.code.append(file_lines[comment_range+i].strip())
                 i += 1
         else:
             break
@@ -99,7 +99,7 @@ def handle_code(file_lines, comment_range):
     buffer = []
     bracket = 1
     i = 2
-    buffer.append(file_lines[comment_range + 1][:-1].strip())
+    buffer.append(file_lines[comment_range + 1].strip())
     while bracket != 0:
         line = file_lines[comment_range + i]
         buffer.append(line[:-1])
@@ -115,7 +115,7 @@ def handle_key_word(file_lines, comment_range, key_word):
     key_word = '@' + key_word + ' '
     for i in file_lines[:comment_range]:
         if i.find(key_word) != -1:
-            return i[i.find(key_word) + len(key_word):][:-1].strip()
+            return i[i.find(key_word) + len(key_word):].strip()
     return None
 
 
@@ -124,15 +124,15 @@ def handle_multiple_key_word(file_lines, comment_range, key_word):
     buffer = []
     for i in file_lines[:comment_range]:
         if i.find(key_word) != -1:
-            buffer.append(i[i.find(key_word) + len(key_word):][:-1])
+            buffer.append(i[i.find(key_word) + len(key_word):].strip())
     return buffer
 
 
-def handle_description(file_lines, comment_range, strip_char=None):
+def handle_description(file_lines, comment_range):
     description = []
     for line in file_lines[1:comment_range]:
         if '@' not in line:
-            description.append(line[line.find('*')+1:-1].strip(strip_char))
+            description.append(line[line.find('*')+1:].strip())
     return description
 
 
@@ -147,8 +147,8 @@ def handle_returns(file_lines, comment_range):
     if returns_line == 0:
         return None, 0
     returns = handle_description(file_lines[returns_line:], comment_range-returns_line)
-    if file_lines[returns_line][file_lines[returns_line].find(key_word)+len(key_word):-1]:
-        returns.insert(0, file_lines[returns_line][file_lines[returns_line].find(key_word)+len(key_word):-1])
+    if file_lines[returns_line][file_lines[returns_line].find(key_word)+len(key_word): -1]:
+        returns.insert(0, file_lines[returns_line][file_lines[returns_line].find(key_word)+len(key_word): -1])
     i = 0
     del_empty = []
     for line in returns:
@@ -185,7 +185,7 @@ def handle_attentions(file_lines, comment_range):
         next_at = comment_range
     attentions = handle_description(file_lines[attention_line:], next_at)
     if file_lines[attention_line][file_lines[attention_line].find(key_word)+len(key_word):-1]:
-        attentions.insert(0, file_lines[attention_line][file_lines[attention_line].find(key_word)+len(key_word):-1])
+        attentions.insert(0, file_lines[attention_line][file_lines[attention_line].find(key_word)+len(key_word):-1].strip())
     if file_lines[attention_line+next_at].find(key_word) != -1:
         attentions.append(handle_attentions(file_lines[next_at+attention_line:], comment_range-next_at-attention_line))
     return attentions
