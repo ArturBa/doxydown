@@ -8,4 +8,4 @@ python:
 
 # command to run tests
 script:
-  - tests/test.py
+  - python tests/test.py
