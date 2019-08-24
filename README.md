@@ -1,4 +1,5 @@
 # Doxydown - documentation utility
+[![Build Status](https://travis-ci.com/ArturBa/doxydown.svg?token=5PNdM7qHNNqDFxDZsBRp&branch=develop)](https://travis-ci.com/ArturBa/doxydown)
 
 tool to make your source code to Markdown document in few seconds
 
