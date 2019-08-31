@@ -1,6 +1,10 @@
 import unittest
+import xmlrunner
+
 from doxydown.classes import Function, Define
 from doxydown.comments import function_comment, define_comment
+
+xml_report_dir = "reports"
 
 
 class TestFunctionMethods(unittest.TestCase):
@@ -8,7 +12,7 @@ class TestFunctionMethods(unittest.TestCase):
     def setUp(self):
         pass
 
-    def test_function_0(self):
+    def test_function(self):
         test_code = ['/**\n',
                      ' * @brief Check if number is odd\n',
                      ' * This function checks if given number is odd\n',
@@ -37,7 +41,7 @@ class TestDefineMethods(unittest.TestCase):
     def setUp(self):
         pass
 
-    def test_define_0(self):
+    def test_define(self):
         test_code = ['/**\n',
                      ' * @def Number defines\n',
                      ' * @brief basic number defines\n',
@@ -58,4 +62,4 @@ class TestDefineMethods(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(testRunner=xmlrunner.XMLTestRunner(output=xml_report_dir))
