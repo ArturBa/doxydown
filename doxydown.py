@@ -9,7 +9,7 @@ from doxydown.print import print_doxydown
 from doxydown.comments import handle_comment
 
 
-ExtensionsRegex = [r'\w\.[h|c]\b']
+ExtensionsRegex = [r'\w\.(h|c|hh|cc)\b']
 
 
 def parse_arguments():

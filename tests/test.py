@@ -8,7 +8,7 @@ class TestFunctionMethods(unittest.TestCase):
     def setUp(self):
         pass
 
-    def test_function_0(self):
+    def test_function(self):
         test_code = ['/**\n',
                      ' * @brief Check if number is odd\n',
                      ' * This function checks if given number is odd\n',
@@ -37,11 +37,30 @@ class TestDefineMethods(unittest.TestCase):
     def setUp(self):
         pass
 
-    def test_define_0(self):
+    def test_define(self):
         test_code = ['/**\n',
                      ' * @def Number defines\n',
                      ' * @brief basic number defines\n',
                      ' * Defines numbers to strings\n',
+                     ' */\n',
+                     ' #define ONE 1\n',
+                     ' #define TWENTY_ONE 21\n']
+        define_test = define_comment(test_code, 4)
+        define = Define()
+        define.name = 'Number defines'
+        define.description = ['Defines numbers to strings']
+        define.code = ['#define ONE 1', '#define TWENTY_ONE 21']
+        define.brief = 'basic number defines'
+        self.assertEqual(define.name, define_test.name)
+        self.assertEqual(define.brief, define_test.brief)
+        self.assertEqual(define.description, define_test.description)
+        self.assertEqual(define.code, define_test.code)
+
+    def test_define_1(self):
+        test_code = ['/**\n',
+                     ' @def Number defines\n',
+                     ' @brief basic number defines\n',
+                     ' Defines numbers to strings\n',
                      ' */\n',
                      ' #define ONE 1\n',
                      ' #define TWENTY_ONE 21\n']

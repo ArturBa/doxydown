@@ -106,6 +106,7 @@ def print_functions(functions, file_handler):
                         file_handler.write(f'{j}\n')
                 else:
                     file_handler.write(f'{i}\n')
+            file_handler.write(f'\n')
         if function.params:
             file_handler.write(f'*Parameters:*\n\n')
             for i in function.params:
